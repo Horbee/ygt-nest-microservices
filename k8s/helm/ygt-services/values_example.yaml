@@ -1,0 +1,23 @@
+# mongodb:
+#   architecture: replicaset
+#   auth:
+#     rootPassword: password123
+
+databaseUrl: db_url
+
+rabbitmq:
+  auth:
+    username: user1
+    password: password123
+
+authentication:
+  jwtSecret: superSecret
+  jwtRtSecret: superSecret2
+
+eventSvc:
+  cloudinaryCloudName: cloudinary
+  cloudinaryApiKey: cloudinary
+  cloudinaryApiSecret: cloudinary
+
+messaging:
+  sendGridKey: sendgrid

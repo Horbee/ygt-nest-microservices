@@ -1,0 +1,792 @@
+{
+	"info": {
+		"_postman_id": "740251bb-c171-4168-890e-1ec09dddedb9",
+		"name": "YGT-Server",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = JSON.parse(responseBody);\r",
+									"\r",
+									"const accessToken = jsonData[\"access_token\"];\r",
+									"const refreshToken = jsonData[\"refresh_token\"];\r",
+									"\r",
+									"if (!accessToken) {\r",
+									"    console.error(\"Error: No access token found\");\r",
+									"    return;\r",
+									"} \r",
+									"if (!refreshToken) {\r",
+									"    console.error(\"Error: No refresh token found\");\r",
+									"    return;\r",
+									"} \r",
+									"\r",
+									"postman.setEnvironmentVariable(\"token\", accessToken);\r",
+									"postman.setEnvironmentVariable(\"refresh_token\", refreshToken);\r",
+									"\r",
+									"console.log(\"Tokens Set\");\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"identifier\": \"test@test.com\",\n    \"password\": \"testtest\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{auth_api_url}}/auth/local/login",
+							"host": [
+								"{{auth_api_url}}"
+							],
+							"path": [
+								"auth",
+								"local",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = JSON.parse(responseBody);\r",
+									"\r",
+									"const accessToken = jsonData[\"access_token\"];\r",
+									"const refreshToken = jsonData[\"refresh_token\"];\r",
+									"\r",
+									"if (!accessToken) {\r",
+									"    console.error(\"Error: No access token found\");\r",
+									"    return;\r",
+									"} \r",
+									"if (!refreshToken) {\r",
+									"    console.error(\"Error: No refresh token found\");\r",
+									"    return;\r",
+									"} \r",
+									"\r",
+									"postman.setEnvironmentVariable(\"token\", accessToken);\r",
+									"postman.setEnvironmentVariable(\"refresh_token\", refreshToken);\r",
+									"\r",
+									"console.log(\"Tokens Set\");\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"identifier\": \"test@test.com\",\n    \"name\": \"Test User\",\n    \"password\": \"testtest\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{auth_api_url}}/auth/local/register",
+							"host": [
+								"{{auth_api_url}}"
+							],
+							"path": [
+								"auth",
+								"local",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Token Refresh",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = JSON.parse(responseBody);\r",
+									"\r",
+									"const accessToken = jsonData[\"access_token\"];\r",
+									"const refreshToken = jsonData[\"refresh_token\"];\r",
+									"\r",
+									"if (!accessToken) {\r",
+									"    console.error(\"Error: No access token found\");\r",
+									"    return;\r",
+									"} \r",
+									"if (!refreshToken) {\r",
+									"    console.error(\"Error: No refresh token found\");\r",
+									"    return;\r",
+									"} \r",
+									"\r",
+									"postman.setEnvironmentVariable(\"token\", accessToken);\r",
+									"postman.setEnvironmentVariable(\"refresh_token\", refreshToken);\r",
+									"\r",
+									"console.log(\"Tokens Refreshed\");\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{refresh_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{auth_api_url}}/auth/local/refresh",
+							"host": [
+								"{{auth_api_url}}"
+							],
+							"path": [
+								"auth",
+								"local",
+								"refresh"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{auth_api_url}}/auth/local/logout",
+							"host": [
+								"{{auth_api_url}}"
+							],
+							"path": [
+								"auth",
+								"local",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "ListByIdentifier",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{auth_api_url}}/users?identifier=test",
+							"host": [
+								"{{auth_api_url}}"
+							],
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "identifier",
+									"value": "test"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Me",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{auth_api_url}}/users/me",
+							"host": [
+								"{{auth_api_url}}"
+							],
+							"path": [
+								"users",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Me",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Norbee\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{auth_api_url}}/users/me",
+							"host": [
+								"{{auth_api_url}}"
+							],
+							"path": [
+								"users",
+								"me"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Events",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Eat together\",\r\n    \"slug\": \"eat-together\",\r\n    \"fromDate\": \"2022-12-08T09:24:03.384Z\",\r\n    \"untilDate\": \"2022-12-08T09:24:03.384Z\",\r\n    \"wholeDay\": false,\r\n    \"invitedUserIds\": [],\r\n    \"tags\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{event_api_url}}/events",
+							"host": [
+								"{{event_api_url}}"
+							],
+							"path": [
+								"events"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"63aaea6eb7ad5919366fd4ee\",\r\n    \"slug\": \"test-event\",\r\n    \"name\": \"Test Event \",\r\n    \"description\": \"The choice of font and font size with which Lorem ipsum is reproduced answers to specific needs that go beyond the simple and simple filling of spaces dedicated to accepting real texts and allowing to have hands an advertising/publishing product, both web and paper, true to reality.\",\r\n    \"public\": true,\r\n    \"wholeDay\": true,\r\n    \"fromDate\": \"2022-11-29T23:00:00.000Z\",\r\n    \"untilDate\": \"2022-11-29T23:00:00.000Z\",\r\n    \"ownerId\": \"63a5df13b67f4cb8611ba481\",\r\n    \"invitedUserIds\": [],\r\n    \"tags\": [\r\n        \"test\"\r\n    ],\r\n    \"coverImageId\": \"63b300e181d1ba70db59c250\",\r\n    \"createdAt\": \"2022-12-27T12:51:58.915Z\",\r\n    \"updatedAt\": \"2023-01-01T12:07:22.968Z\",\r\n    \"invitedUsers\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{event_api_url}}/events/:id",
+							"host": [
+								"{{event_api_url}}"
+							],
+							"path": [
+								"events",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "63aaea6eb7ad5919366fd4ee"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{event_api_url}}/events/:id",
+							"host": [
+								"{{event_api_url}}"
+							],
+							"path": [
+								"events",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "639738f4a25dfbaac4c7303c"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Events",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{event_api_url}}/events?type=own&start=0&size=5",
+							"host": [
+								"{{event_api_url}}"
+							],
+							"path": [
+								"events"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "invited",
+									"disabled": true
+								},
+								{
+									"key": "type",
+									"value": "own"
+								},
+								{
+									"key": "type",
+									"value": "public",
+									"disabled": true
+								},
+								{
+									"key": "start",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Upload Attachment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/Norbee/Pictures/avatar-375-456327.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{event_api_url}}/attachments/upload",
+							"host": [
+								"{{event_api_url}}"
+							],
+							"path": [
+								"attachments",
+								"upload"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Attachment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{event_api_url}}/attachments/:public_id",
+							"host": [
+								"{{event_api_url}}"
+							],
+							"path": [
+								"attachments",
+								":public_id"
+							],
+							"variable": [
+								{
+									"key": "public_id",
+									"value": "fkmogkjlakwl08iy8yoz"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EventById",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{event_api_url}}/events/:id",
+							"host": [
+								"{{event_api_url}}"
+							],
+							"path": [
+								"events",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "63aaea6eb7ad5919366fd4ee"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EventBySlug",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{event_api_url}}/events/slug/:slug",
+							"host": [
+								"{{event_api_url}}"
+							],
+							"path": [
+								"events",
+								"slug",
+								":slug"
+							],
+							"query": [
+								{
+									"key": "withAvailabilities",
+									"value": "false",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "slug",
+									"value": "eat-together"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Availability",
+			"item": [
+				{
+					"name": "List",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{event_api_url}}/availabilities/event/:id",
+							"host": [
+								"{{event_api_url}}"
+							],
+							"path": [
+								"availabilities",
+								"event",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "63aaea6eb7ad5919366fd4ee"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Norbee\",\n    \"available\": \"good\",\n    \"comment\": \"hello world\",\n    \"date\": \"2022-12-06T12:09:09.889Z\",\n    \"eventId\": \"63cd1a89efffb796b2ef740c\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{event_api_url}}/availabilities",
+							"host": [
+								"{{event_api_url}}"
+							],
+							"path": [
+								"availabilities"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateOne",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"63b9a3fccc7e7e70ed7cad83\",\n    \"available\": \"good\",\n    \"comment\": \"hello world test\",\n    \"date\": \"2022-12-06T12:09:09.889Z\",\n    \"fromTime\": null,\n    \"untilTime\": null,\n    \"ownerId\": \"63a5df13b67f4cb8611ba481\",\n    \"eventId\": \"63aaea6eb7ad5919366fd4ee\",\n    \"createdAt\": \"2023-01-07T16:55:24.543Z\",\n    \"updatedAt\": \"2023-01-07T16:55:24.543Z\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{event_api_url}}/availabilities/:id",
+							"host": [
+								"{{event_api_url}}"
+							],
+							"path": [
+								"availabilities",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "63b9a3fccc7e7e70ed7cad83"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{event_api_url}}/availabilities/:id",
+							"host": [
+								"{{event_api_url}}"
+							],
+							"path": [
+								"availabilities",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "63b9a3fccc7e7e70ed7cad83"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

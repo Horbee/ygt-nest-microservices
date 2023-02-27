@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: messaging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: messaging
+  template:
+    metadata:
+      labels:
+        app: messaging
+    spec:
+      containers:
+        - name: messaging
+          image: horbee/ygt-messaging
+          env:
+            - name: RABBIT_MQ_PW
+              valueFrom:
+                secretKeyRef:
+                  name: ygt-services-rabbitmq
+                  key: rabbitmq-password
+            - name: RABBIT_MQ_URI
+              value: 'amqp://user1:$(RABBIT_MQ_PW)@ygt-services-rabbitmq-headless:5672'
+            - name: SEND_GRID_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: ygt-services-messaging
+                  key: SEND_GRID_KEY

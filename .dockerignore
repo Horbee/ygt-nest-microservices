@@ -1,0 +1,17 @@
+# Versioning and metadata
+.git
+.gitignore
+.dockerignore
+
+# Build dependencies
+dist.io
+node_modules
+
+# Environment, sensitive data
+**/*.env
+
+# Misc
+.eslintrc.js
+.prettierrc
+README.md
+import-sorter.json

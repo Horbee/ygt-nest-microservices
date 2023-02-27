@@ -1,0 +1,93 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Availability {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  v  Int    @default(0) @map("__v") @ignore
+
+  available String
+  comment   String?
+  date      DateTime  @db.Date
+  fromTime  DateTime? @db.Date
+  untilTime DateTime? @db.Date
+  owner     User      @relation(fields: [ownerId], references: [id])
+  ownerId   String    @map("owner") @db.ObjectId
+  event     Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  eventId   String    @map("event") @db.ObjectId
+
+  createdAt DateTime @default(now()) @db.Date
+  updatedAt DateTime @updatedAt() @db.Date
+
+  @@map("availabilities")
+}
+
+model Event {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  v  Int    @default(0) @map("__v") @ignore
+
+  name           String
+  slug           String         @unique()
+  description    String?
+  public         Boolean        @default(false)
+  wholeDay       Boolean        @default(false)
+  fromDate       DateTime       @db.Date
+  fromTime       DateTime?      @db.Date
+  untilDate      DateTime       @db.Date
+  untilTime      DateTime?      @db.Date
+  owner          User           @relation(name: "ownedEvents", fields: [ownerId], references: [id])
+  ownerId        String         @map("owner") @db.ObjectId
+  availabilities Availability[]
+  invitedUserIds String[]       @db.ObjectId
+  invitedUsers   User[]         @relation(name: "invitedEvents", fields: [invitedUserIds], references: [id])
+  tags           String[]
+  coverImage     Attachment?    @relation(fields: [coverImageId], references: [id])
+  coverImageId   String?        @map("attachment") @db.ObjectId
+
+  createdAt DateTime @default(now()) @db.Date
+  updatedAt DateTime @updatedAt() @db.Date
+
+  @@map("events")
+}
+
+model User {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  v  Int    @default(0) @map("__v") @ignore
+
+  identifier       String         @unique(map: "identifier_1")
+  name             String
+  password         String
+  availabilities   Availability[]
+  ownEvents        Event[]        @relation("ownedEvents")
+  invitedEventIds  String[]       @db.ObjectId
+  invitedEvents    Event[]        @relation(name: "invitedEvents", fields: [invitedEventIds], references: [id])
+  refreshTokenHash String?
+
+  createdAt DateTime @default(now()) @db.Date
+  updatedAt DateTime @updatedAt() @db.Date
+
+  @@map("users")
+}
+
+model Attachment {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  v  Int    @default(0) @map("__v") @ignore
+
+  public_id     String @unique()
+  width         Int?
+  height        Int?
+  format        String
+  resource_type String
+  url           String
+
+  createdAt DateTime @default(now()) @db.Date
+  updatedAt DateTime @updatedAt() @db.Date
+  events    Event[]
+
+  @@map("attachments")
+}

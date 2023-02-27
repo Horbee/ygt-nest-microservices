@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: event-svc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: event-svc
+  template:
+    metadata:
+      labels:
+        app: event-svc
+    spec:
+      containers:
+        - name: event-svc
+          image: horbee/ygt-event-svc
+          ports:
+            - containerPort: 5002
+          env:
+            - name: RABBIT_MQ_PW
+              valueFrom:
+                secretKeyRef:
+                  name: ygt-services-rabbitmq
+                  key: rabbitmq-password
+            # - name: MONGO_DB_PW
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: ygt-services-mongodb
+            #       key: mongodb-root-password
+            - name: PORT
+              value: '5002'
+            - name: RABBIT_MQ_URI
+              value: 'amqp://user1:$(RABBIT_MQ_PW)@ygt-services-rabbitmq-headless:5672'
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: ygt-services-event-svc
+                  key: DATABASE_URL
+              # value: 'mongodb://root:$(MONGO_DB_PW)@ygt-services-mongodb-headless:27017/ygt-db?authSource=admin&directConnection=true'
+            - name: ALLOWED_ORIGINS
+              value: 'http://localhost:3000'
+            - name: CLOUDINARY_CLOUD_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: ygt-services-event-svc
+                  key: CLOUDINARY_CLOUD_NAME
+            - name: CLOUDINARY_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: ygt-services-event-svc
+                  key: CLOUDINARY_API_KEY
+            - name: CLOUDINARY_API_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: ygt-services-event-svc
+                  key: CLOUDINARY_API_SECRET

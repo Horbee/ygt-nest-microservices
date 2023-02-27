@@ -1,0 +1,15 @@
+{
+  "importStringConfiguration": {
+    "trailingComma": "multiline",
+    "hasSemicolon": true,
+    "tabSize": 2,
+    "newLineEachExpressionAfterCountLimit": {
+      "count": 80
+    }
+  },
+  "sortConfiguration": {
+    "customOrderingRules": {
+      "defaultNumberOfEmptyLinesAfterGroup": 1
+    }
+  }
+}
